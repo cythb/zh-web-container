@@ -1,16 +1,13 @@
-var Native = /** @class */ (function () {
-    function Native() {
-    }
-
+class Native {
     /**
-     * @function hello
-     * @description 测试API文档输出
-     * @returns {string} 输出'hello'
+     *
+     *
+     * @return {*}  {string}
+     * @memberof Native
      */
-    Native.prototype.hello = function () {
+    hello() {
         console.log('hello');
         return 'hello';
-    };
-    return Native;
-}());
-var native = new Native();
+    }
+}
+const native = new Native();

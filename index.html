@@ -3,6 +3,10 @@
         <script src="./src/index.js"></script>
     </head>
     <body>
-
+        <div id='output'></div>
+        <script>
+            const msg = native.hello();
+            document.getElementById('output').innerHTML = msg;
+        </script>
     </body>
 </html>
