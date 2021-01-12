@@ -7,6 +7,7 @@ class Native {
      */
     hello() {
         console.log('hello');
+        document.getElementById('output').innerHTML = 'hello';
         return 'hello';
     }
 }
