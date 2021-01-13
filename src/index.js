@@ -104,14 +104,14 @@ class Native {
      * @memberof Native
      */
     reLaunch(url, success, fail, complete) {
-        eventId = this.uuid()
+        let eventId = this.uuid()
         this._events.eventId = {
             'success': success,
             'fail': fail,
             'complete': complete
         }
 
-        msg = {url: url, eventId: eventId}
+        let msg = {url: url, eventId: eventId}
         window.webkit.messageHandlers.reLaunch.postMessage(msg);
     }
 }

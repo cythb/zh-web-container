@@ -12,5 +12,12 @@
         }, () => {
             console.log('complete')
         })" />
+        <input type="button" value="跳转页面不存在" onclick="native.reLaunch('index21.html', (data) => {
+            console.log('success')
+        }, (data) => {
+            console.log('fail')
+        }, () => {
+            console.log('complete')
+        })" />
     </body>
 </html>
