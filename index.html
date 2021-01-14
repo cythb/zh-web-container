@@ -1,23 +1,44 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="./src/index.js"></script>
+<!--        <script src="./src/index.js"></script>-->
+    
     </head>
     <body>
+        <div id="output" style="height: 44pt;">hello</div>
         <div id='output'></div>
-        <input type="button" value="跳转页面2" onclick="native.reLaunch('index2.html', (data) => {
-            console.log('success')
-        }, (data) => {
-            console.log('fail')
-        }, () => {
-            console.log('complete')
-        })" />
-        <input type="button" value="跳转页面不存在" onclick="native.reLaunch('index21.html', (data) => {
-            console.log('success')
-        }, (data) => {
-            console.log('fail')
-        }, () => {
-            console.log('complete')
-        })" />
+        <input type="button" value="跳转页面2" id="btn1"/>
+        <input type="button" value="跳转页面不存在" id="btn2" />
+        
+        
+        <script>
+            function onClickBtn1() {
+                native.reLaunch('index2.html', (data) => {
+                    console.log('success')
+                }, (data) => {
+                    console.log('fail')
+                }, () => {
+                    console.log('complete')
+                })
+            }
+        
+            function onClickBtn2() {
+                native.reLaunch('index21.html', (data) => {
+                    console.log('success')
+                }, (data) => {
+                    console.log('fail')
+                }, () => {
+                    console.log('complete')
+                })
+            }
+        
+            const button = document.querySelector('input[id="btn1"]');
+            button.addEventListener('click', onClickBtn1);
+            
+            const button2 = document.querySelector('input[id="btn2"]');
+            button2.addEventListener('click', onClickBtn2);
+        </script>
     </body>
 </html>
