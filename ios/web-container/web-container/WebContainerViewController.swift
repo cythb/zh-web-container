@@ -8,6 +8,9 @@
 import UIKit
 import WebKit
 import SnapKit
+import Log
+
+let log = Logger()
 
 class WebContainerViewController: UIViewController, WKScriptMessageHandler {
     var webview: WKWebView!
@@ -98,8 +101,8 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         }
 
         let script = "native.done('\(eventId)', \(isSuccess), \(jsonString));"
-        self.webview.evaluateJavaScript(script) { (r1, error) in
-            print("r1 \(r1) error: \(error)")
+        self.webview.evaluateJavaScript(script) { (result, error) in
+            log.debug("result \(String(describing: result)) error: \(String(describing: error))")
         }
     }
 }
