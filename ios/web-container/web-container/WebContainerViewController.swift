@@ -5,10 +5,6 @@
 //  Created by ihugo on 2021/1/12.
 //
 
-import UIKit
-import WebKit
-import SnapKit
-import Log
 
 let log = Logger()
 
@@ -32,7 +28,9 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         
         // 注入JS交互函数
         let relaunchPlugin = ReLaunchPlugin()
+        let takePhotoPlugin = TakePhotoPlugin(delegate: self)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         
         
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
@@ -60,6 +58,9 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
             return p.name == message.name
         }) else { return }
         
+        guard let dict = message.body as? [String: String],
+              nil != dict["eventId"] else { return }
+        
         plugin.userContentController(webview: webview, userContentController: userContentController, didReceive: message, done: done)
     }
     
@@ -72,7 +73,7 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
 
         let script = "native.done('\(eventId)', \(isSuccess), \(jsonString));"
         self.webview.evaluateJavaScript(script) { (result, error) in
-            log.debug("result \(String(describing: result)) error: \(String(describing: error))")
+            log.debug("result \(String(describing: result)) error: \(String(describing: error)) data: \(data)")
         }
     }
     
@@ -99,9 +100,11 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
     
     private func registerPlugin(wkWebConfig: WKWebViewConfiguration, plugin: Plugin) {
         guard nil == self.plugins.first(where: { (p) -> Bool in
-            log.debug("plugin already exists")
             return p.name == plugin.name
-        }) else { return }
+        }) else {
+            log.debug("plugin already exists: \(plugin.name)")
+            return
+        }
         
         wkWebConfig.userContentController.add(self, name: plugin.name)
         self.plugins.append(plugin)
@@ -152,5 +155,15 @@ extension WebContainerViewController: WKUIDelegate {
         }))
         
         present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension WebContainerViewController: RxMediaPickerDelegate {
+    func present(picker: UIImagePickerController) {
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+    func dismiss(picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

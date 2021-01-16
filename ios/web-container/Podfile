@@ -8,5 +8,8 @@ target 'web-container' do
   # Pods for web-container
   pod 'SnapKit', '~> 5.0.0'
   pod 'Log'
+  pod 'RxSwift'
+  pod 'RxMediaPicker', :git => 'https://github.com/cythb/RxMediaPicker.git'
+
 
 end

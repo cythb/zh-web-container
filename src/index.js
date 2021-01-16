@@ -116,6 +116,18 @@ class Native {
         let msg = {url: url, eventId: eventId}
         window.webkit.messageHandlers.reLaunch.postMessage(msg);
     }
+
+    takePhoto(sourceType, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {sourceType: sourceType, eventId: eventId}
+        window.webkit.messageHandlers.takePhoto.postMessage(msg);
+    }
 }
 const native = new Native();
 

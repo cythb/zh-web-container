@@ -8,10 +8,11 @@
     </head>
     <body>
         <div id="top" style="height: 44pt;"></div>
-        <input type="button" value="跳转页面2" id="btn1"/>
-        <input type="button" value="跳转页面不存在" id="btn2" />
+        <input type="button" value="跳转页面2" onclick="onClickBtn1()" />
+        <input type="button" value="跳转页面不存在" onclick="onClickBtn2()" />
         <input type="button" value="对话框" onclick="onClickBtn3()" />
-        
+        <input type="button" value="前摄像头" onclick="onClickBtn4()" />
+        <input type="button" value="后摄像头" onclick="onClickBtn5()" />
         
         <div id='output'></div>
         <script>
@@ -44,13 +45,29 @@
                     console.log('complete')
                 })
             }
-        
-            const button = document.querySelector('input[id="btn1"]');
-            button.addEventListener('click', onClickBtn1);
-            
-            const button2 = document.querySelector('input[id="btn2"]');
-            button2.addEventListener('click', onClickBtn2);
 
+            function onClickBtn4() {
+                native.takePhoto('front',
+                (data) => {
+                    console.log('takePhoto 完成：' + data.tempImagePath)
+                }, (data) => {
+                    console.log('takePhoto 失败')
+                }, () => {
+                    console.log('takePhoto complete')
+                })
+            }
+
+            function onClickBtn5() {
+                native.takePhoto('rear',
+                (data) => {
+                    console.log('takePhoto 完成：' + data.tempImagePath)
+                }, (data) => {
+                    console.log('takePhoto 失败')
+                }, () => {
+                    console.log('takePhoto complete')
+                })
+            }
+        
             log('systemInfo:')
             log(JSON.stringify(systemInfo))
         </script>
