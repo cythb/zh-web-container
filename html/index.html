@@ -13,6 +13,7 @@
         <input type="button" value="对话框" onclick="onClickBtn3()" />
         <input type="button" value="前摄像头" onclick="onClickBtn4()" />
         <input type="button" value="后摄像头" onclick="onClickBtn5()" />
+        <input type="button" value="选择相片" onclick="onClickBtn6()" />
         
         <div id='output'></div>
         <script>
@@ -65,6 +66,17 @@
                     console.log('takePhoto 失败')
                 }, () => {
                     console.log('takePhoto complete')
+                })
+            }
+
+            function onClickBtn6() {
+                native.chooseImage('album',
+                (data) => {
+                    console.log('chooseImage 完成：' + data.tempImagePath)
+                }, (data) => {
+                    console.log('chooseImage 失败')
+                }, () => {
+                    console.log('chooseImage complete')
                 })
             }
         
