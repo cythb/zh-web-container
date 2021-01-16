@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import SnapKit
 
-class ViewController: UIViewController, WKScriptMessageHandler {
+class WebContainerViewController: UIViewController, WKScriptMessageHandler {
     var webview: WKWebView!
     
     override func viewDidLoad() {
@@ -32,8 +32,9 @@ class ViewController: UIViewController, WKScriptMessageHandler {
         // 注入JS交互函数
         wkWebConfig.userContentController.add(self, name: "reLaunch")
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
+        webview.uiDelegate = self
         
-        let path = Bundle.main.path(forResource: "index", ofType: "html")
+        let path = getPath(fileName: "index.html")
         let url = URL(fileURLWithPath: path!)
         let request = URLRequest(url: url)
         webview.load(request)
@@ -86,7 +87,7 @@ class ViewController: UIViewController, WKScriptMessageHandler {
             return fileInDoc
         }
         
-        return Bundle.main.path(forResource: fileName, ofType: nil)
+        return Bundle.main.path(forResource: "html/\(fileName)", ofType: nil)
     }
     
     func done(eventId: String, isSuccess: Bool, data: [String: String]) {
@@ -103,3 +104,49 @@ class ViewController: UIViewController, WKScriptMessageHandler {
     }
 }
 
+extension WebContainerViewController: WKUIDelegate {
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            completionHandler()
+        }))
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            completionHandler(true)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+            completionHandler(false)
+        }))
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
+        let alertController = UIAlertController(title: nil, message: prompt, preferredStyle: .alert)
+        
+        alertController.addTextField { (textField) in
+            textField.text = defaultText
+        }
+        
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            if let text = alertController.textFields?.first?.text {
+                completionHandler(text)
+            } else {
+                completionHandler(defaultText)
+            }
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+            completionHandler(nil)
+        }))
+        
+        present(alertController, animated: true, completion: nil)
+    }
+}

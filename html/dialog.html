@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--        <script src="./src/index.js"></script>-->
+    
+    </head>
+    <body>
+        <div id="top" style="height: 44pt;">hello</div>
+        <input type="button" value="返回" id="btn1"/>
+        <input type="button" value="alert" onclick="onAlert()"/>
+        <input type="button" value="confirm" onclick="onConfirm()"/>
+        <input type="button" value="prompt" onclick="onPrompt()"/>
+        
+        <div id='output'></div>
+        <script>
+            function onClickBtn1() {
+                native.reLaunch('index.html', (data) => {
+                    console.log('success')
+                }, (data) => {
+                    console.log('fail')
+                }, () => {
+                    console.log('complete')
+                })
+            }
+            
+            function onConfirm() {
+                var txt;
+                var r = confirm("Press a button!");
+                if (r == true) {
+                    txt = "You pressed OK!";
+                } else {
+                    txt = "You pressed Cancel!";
+                }
+                document.getElementById("output").innerHTML = txt;
+            }
+
+            function onAlert() {
+                alert("Press a button!");
+                txt = "You pressed OK!";
+                document.getElementById("output").innerHTML = txt;
+            }
+        
+            function onPrompt() {
+                var person = prompt("Please enter your name", "Harry Potter");
+                if (person != null) {
+                    document.getElementById("output").innerHTML =
+                    "Hello " + person + "! How are you today?";
+                }
+            }
+        
+            const button = document.querySelector('input[id="btn1"]');
+            button.addEventListener('click', onClickBtn1);
+            
+        </script>
+    </body>
+</html>

@@ -8,11 +8,12 @@
     </head>
     <body>
         <div id="output" style="height: 44pt;">hello</div>
-        <div id='output'></div>
         <input type="button" value="跳转页面2" id="btn1"/>
         <input type="button" value="跳转页面不存在" id="btn2" />
+        <input type="button" value="对话框" onclick="onClickBtn3()" />
         
         
+        <div id='output'></div>
         <script>
             function onClickBtn1() {
                 native.reLaunch('index2.html', (data) => {
@@ -26,6 +27,16 @@
         
             function onClickBtn2() {
                 native.reLaunch('index21.html', (data) => {
+                    console.log('success')
+                }, (data) => {
+                    console.log('fail')
+                }, () => {
+                    console.log('complete')
+                })
+            }
+
+            function onClickBtn3() {
+                native.reLaunch('dialog.html', (data) => {
                     console.log('success')
                 }, (data) => {
                     console.log('fail')
