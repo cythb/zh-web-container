@@ -26,3 +26,18 @@ func getTempDirectoryPath() -> URL {
     let tempDirectoryPath = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     return tempDirectoryPath
 }
+
+/// 获取资源的路径。
+///
+/// 默认搜索顺序：Document/web, main bundle
+/// - Parameter fileName: resource name
+/// - Returns: path
+func getPath(fileName: String) -> String? {
+    let doc = getDocumentDirectoryPath()
+    let fileInDoc = "\(doc.absoluteString)/\(fileName)"
+    if FileManager.default.fileExists(atPath: fileName) {
+        return fileInDoc
+    }
+    
+    return Bundle.main.path(forResource: "html/\(fileName)", ofType: nil)
+}

@@ -14,6 +14,7 @@ let log = Logger()
 
 class WebContainerViewController: UIViewController, WKScriptMessageHandler {
     var webview: WKWebView!
+    var plugins = [Plugin]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +29,12 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         
         let wkWebConfig = WKWebViewConfiguration()
         wkWebConfig.userContentController = wkUController
+        
         // 注入JS交互函数
-        wkWebConfig.userContentController.add(self, name: "reLaunch")
+        let relaunchPlugin = ReLaunchPlugin()
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
+        
+        
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self
         
@@ -47,46 +52,15 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
             webview.scrollView.contentInsetAdjustmentBehavior = .never
         } else {
         }
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//            // your code here
-//            self.webview.evaluateJavaScript("native.hello();") { (r1, error) in
-//                print("r1 \(r1) error: \(error)")
-//            }
-//        }
     }
     
     /// WKScriptMessageHandler
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if (message.name == "reLaunch") {
-            guard let dict = message.body as? [String: String],
-                  let eventId = dict["eventId"] else { return }
-            guard let file = dict["url"],
-                  let path = getPath(fileName: file) else {
-                done(eventId: eventId, isSuccess: false, data: ["": ""])
-                return
-            }
-            
-            done(eventId: eventId, isSuccess: true, data: ["": ""])
-            let url = URL(fileURLWithPath: path)
-            let request = URLRequest(url: url)
-            webview.load(request)
-        }
-    }
-    
-    /// 获取资源的路径。
-    ///
-    /// 默认搜索顺序：Document/web, main bundle
-    /// - Parameter fileName: resource name
-    /// - Returns: path
-    func getPath(fileName: String) -> String? {
-        let doc = getDocumentDirectoryPath()
-        let fileInDoc = "\(doc.absoluteString)/\(fileName)"
-        if FileManager.default.fileExists(atPath: fileName) {
-            return fileInDoc
-        }
+        guard let plugin = self.plugins.first(where: { (p) -> Bool in
+            return p.name == message.name
+        }) else { return }
         
-        return Bundle.main.path(forResource: "html/\(fileName)", ofType: nil)
+        plugin.userContentController(webview: webview, userContentController: userContentController, didReceive: message, done: done)
     }
     
     func done(eventId: String, isSuccess: Bool, data: [String: String]) {
@@ -121,6 +95,16 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let js = "const systemInfo = \(info);"
         let wkUScript = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         return wkUScript
+    }
+    
+    private func registerPlugin(wkWebConfig: WKWebViewConfiguration, plugin: Plugin) {
+        guard nil == self.plugins.first(where: { (p) -> Bool in
+            log.debug("plugin already exists")
+            return p.name == plugin.name
+        }) else { return }
+        
+        wkWebConfig.userContentController.add(self, name: plugin.name)
+        self.plugins.append(plugin)
     }
 }
 

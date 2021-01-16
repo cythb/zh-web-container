@@ -16,6 +16,7 @@
 		5B0FD74425AD546500A30C7E /* src in Resources */ = {isa = PBXBuildFile; fileRef = 5B0FD74225AD546500A30C7E /* src */; };
 		5B92120C25B28E48008B81ED /* html in Resources */ = {isa = PBXBuildFile; fileRef = 5B92120B25B28E48008B81ED /* html */; };
 		5B92121925B2B013008B81ED /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B92121825B2B013008B81ED /* SystemInfo.swift */; };
+		5B92122525B2D737008B81ED /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B92122425B2D737008B81ED /* Plugin.swift */; };
 		5BD9D96725B082F3006FC2FB /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD9D96625B082F3006FC2FB /* Utils.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		5B0FD74225AD546500A30C7E /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = ../../../../src; sourceTree = "<group>"; };
 		5B92120B25B28E48008B81ED /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = ../../../../html; sourceTree = "<group>"; };
 		5B92121825B2B013008B81ED /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
+		5B92122425B2D737008B81ED /* Plugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
 		5BD9D96625B082F3006FC2FB /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 				5B0FD72B25AD53F000A30C7E /* AppDelegate.swift */,
 				5B92121825B2B013008B81ED /* SystemInfo.swift */,
 				5B0FD72F25AD53F000A30C7E /* WebContainerViewController.swift */,
+				5B92122425B2D737008B81ED /* Plugin.swift */,
 				5BD9D96625B082F3006FC2FB /* Utils.swift */,
 				5B0FD73125AD53F000A30C7E /* Main.storyboard */,
 				5B0FD73425AD53F100A30C7E /* Assets.xcassets */,
@@ -227,6 +230,7 @@
 				5B0FD73025AD53F000A30C7E /* WebContainerViewController.swift in Sources */,
 				5B0FD72C25AD53F000A30C7E /* AppDelegate.swift in Sources */,
 				5B92121925B2B013008B81ED /* SystemInfo.swift in Sources */,
+				5B92122525B2D737008B81ED /* Plugin.swift in Sources */,
 				5BD9D96725B082F3006FC2FB /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
