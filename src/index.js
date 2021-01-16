@@ -4,9 +4,11 @@
  *
  * @param {*} text
  */
+var outputText = ''
 function log(text) {
     console.log(text);
-    document.getElementById('output').innerHTML = text;
+    outputText += text + '\n'
+    document.getElementById('output').innerHTML = outputText;
 }
 
 /** Class representing a point. */

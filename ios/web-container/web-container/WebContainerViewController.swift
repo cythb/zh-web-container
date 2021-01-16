@@ -18,18 +18,14 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 注入JS
-        var jScript = ""
-        if let jsPath = Bundle.main.path(forResource: "src/index", ofType: "js") {
-            let jsURL = URL(fileURLWithPath: jsPath)
-            if  let data = try? Data(contentsOf: jsURL), let script = String(data: data, encoding: .utf8) {
-                jScript = script
-            }
-        }
-        
-        let wkUScript = WKUserScript(source: jScript, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         let wkUController = WKUserContentController()
+        // 注入JS
+        if let infoScript = self.scriptForSystemInfo() {
+            wkUController.addUserScript(infoScript)
+        }
+        let wkUScript = self.scriptForSDK()
         wkUController.addUserScript(wkUScript)
+        
         let wkWebConfig = WKWebViewConfiguration()
         wkWebConfig.userContentController = wkUController
         // 注入JS交互函数
@@ -104,6 +100,27 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         self.webview.evaluateJavaScript(script) { (result, error) in
             log.debug("result \(String(describing: result)) error: \(String(describing: error))")
         }
+    }
+    
+    private func scriptForSDK() -> WKUserScript {
+        var jScript = ""
+        if let jsPath = Bundle.main.path(forResource: "src/index", ofType: "js") {
+            let jsURL = URL(fileURLWithPath: jsPath)
+            if  let data = try? Data(contentsOf: jsURL), let script = String(data: data, encoding: .utf8) {
+                jScript = script
+            }
+        }
+        
+        let wkUScript = WKUserScript(source: jScript, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        return wkUScript
+    }
+    
+    private func scriptForSystemInfo() -> WKUserScript? {
+        guard let info = SystemInfo.getInfo().jsonString() else { return nil }
+        
+        let js = "const systemInfo = \(info);"
+        let wkUScript = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        return wkUScript
     }
 }
 

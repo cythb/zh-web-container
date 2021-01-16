@@ -7,7 +7,7 @@
     
     </head>
     <body>
-        <div id="output" style="height: 44pt;">hello</div>
+        <div id="top" style="height: 44pt;"></div>
         <input type="button" value="跳转页面2" id="btn1"/>
         <input type="button" value="跳转页面不存在" id="btn2" />
         <input type="button" value="对话框" onclick="onClickBtn3()" />
@@ -50,6 +50,9 @@
             
             const button2 = document.querySelector('input[id="btn2"]');
             button2.addEventListener('click', onClickBtn2);
+
+            log('systemInfo:')
+            log(JSON.stringify(systemInfo))
         </script>
     </body>
 </html>
