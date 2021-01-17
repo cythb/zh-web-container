@@ -41,3 +41,11 @@ func getPath(fileName: String) -> String? {
     
     return Bundle.main.path(forResource: "html/\(fileName)", ofType: nil)
 }
+
+/// 获取用户主目录
+/// - Returns: 主目录
+func getHomeDirectoryPath() -> URL {
+    let arrayPaths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    let docDirectoryPath = arrayPaths[0]
+    return docDirectoryPath.deletingLastPathComponent()
+}

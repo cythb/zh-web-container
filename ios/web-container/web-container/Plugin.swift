@@ -267,3 +267,48 @@ class ScanCodePlugin: NSObject, Plugin, UIImagePickerControllerDelegate, UINavig
         }
     }
 }
+
+class GetFileListPlugin: Plugin {
+    var name: String {
+        return "getFileList"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        var path = (dict["path"] as? String) ?? "/"
+        if path.hasSuffix("/") {
+            path.removeLast()
+        }
+        
+        var files = [[String: Any]]()
+        var url = getHomeDirectoryPath()
+        if path.lengthOfBytes(using: .utf8) > 0 {
+            url.appendPathComponent(path)
+        }
+        if let items = try? FileManager.default.contentsOfDirectory(atPath: url.relativePath) {
+            for file in items {
+                let filePath = "\(url.relativePath)/\(file)"
+                guard let attributes = try? FileManager.default.attributesOfItem(atPath: filePath) as NSDictionary else {
+                    done(eventId, false, ["message": "获取文件属性失败"])
+                    continue
+                }
+                var item = [String: Any]()
+                let size = attributes.fileSize()
+                let createTime = attributes.fileCreationDate()?.timeIntervalSince1970 ?? 0
+                let fileType = attributes.fileType()
+                item["filePath"] = filePath
+                item["size"] = size
+                item["createTime"] = createTime
+                item["fileType"] = fileType
+                files.append(item)
+            }
+            done(eventId, true, ["files": files])
+            return
+        }
+        done(eventId, false, ["message": "查询文件失败"])
+    }
+}

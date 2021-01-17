@@ -7,7 +7,7 @@
 var outputText = ''
 function log(text) {
     console.log(text);
-    outputText += text + '\n'
+    outputText += text + '<br/>'
     document.getElementById('output').innerHTML = outputText;
 }
 
@@ -139,6 +139,30 @@ class Native {
 
         let msg = {sourceType: sourceType, eventId: eventId}
         window.webkit.messageHandlers.chooseImage.postMessage(msg);
+    }
+    
+    scanCode(onlyFromCamera, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {onlyFromCamera: onlyFromCamera, eventId: eventId}
+        window.webkit.messageHandlers.scanCode.postMessage(msg);
+    }
+
+    getFileList(path, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {path: path, eventId: eventId}
+        window.webkit.messageHandlers.getFileList.postMessage(msg);
     }
 }
 const native = new Native();

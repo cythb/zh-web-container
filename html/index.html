@@ -14,6 +14,9 @@
         <input type="button" value="前摄像头" onclick="onClickBtn4()" />
         <input type="button" value="后摄像头" onclick="onClickBtn5()" />
         <input type="button" value="选择相片" onclick="onClickBtn6()" />
+        <input type="button" value="二维码" onclick="onClickBtn7()" />
+        <input type="button" value="二维码(相机)" onclick="onClickBtn8()" />
+        <input type="button" value="文件列表" onclick="onClickBtn9()" />
         
         <div id='output'></div>
         <script>
@@ -77,6 +80,45 @@
                     console.log('chooseImage 失败')
                 }, () => {
                     console.log('chooseImage complete')
+                })
+            }
+
+            function onClickBtn7() {
+                native.scanCode(false,
+                (data) => {
+                    console.log('scanCode 完成：' + data.tempImagePath)
+                    log('scanCode 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('scanCode 失败')
+                }, () => {
+                    console.log('scanCode complete')
+                })
+            }
+
+            function onClickBtn8() {
+                native.scanCode(true,
+                (data) => {
+                    console.log('scanCode 完成：' + data.tempImagePath)
+                    log('scanCode 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('scanCode 失败')
+                }, () => {
+                    console.log('scanCode complete')
+                })
+            }
+
+            function onClickBtn9() {
+                native.getFileList('tmp',
+                (data) => {
+                    console.log('getFileList 完成：' + data.tempImagePath)
+                    log('getFileList 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('getFileList 失败')
+                }, () => {
+                    console.log('getFileList complete')
                 })
             }
         
