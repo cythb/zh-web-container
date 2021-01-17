@@ -88,12 +88,13 @@ class Native {
 
         if (isSuccess) {
             k.success(data)
+            delete this._events[eventId]
         } else {
             k.fail(data)
+            delete this._events[eventId]
         }
         k.complete()
 
-        delete this._events[eventId]
     }
 
     /**
