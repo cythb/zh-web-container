@@ -13,6 +13,14 @@
 		5B0FD73525AD53F100A30C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B0FD73425AD53F100A30C7E /* Assets.xcassets */; };
 		5B0FD73825AD53F100A30C7E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B0FD73625AD53F100A30C7E /* LaunchScreen.storyboard */; };
 		5B0FD74425AD546500A30C7E /* src in Resources */ = {isa = PBXBuildFile; fileRef = 5B0FD74225AD546500A30C7E /* src */; };
+		5B6288D225B4321300E235A0 /* LBXScanNetAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288CB25B4321300E235A0 /* LBXScanNetAnimation.swift */; };
+		5B6288D325B4321300E235A0 /* LBXScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288CC25B4321300E235A0 /* LBXScanView.swift */; };
+		5B6288D425B4321300E235A0 /* LBXScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288CD25B4321300E235A0 /* LBXScanViewController.swift */; };
+		5B6288D525B4321300E235A0 /* LBXScanLineAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288CE25B4321300E235A0 /* LBXScanLineAnimation.swift */; };
+		5B6288D625B4321300E235A0 /* LBXScanViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288CF25B4321300E235A0 /* LBXScanViewStyle.swift */; };
+		5B6288D725B4321300E235A0 /* LBXPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288D025B4321300E235A0 /* LBXPermissions.swift */; };
+		5B6288D825B4321300E235A0 /* LBXScanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6288D125B4321300E235A0 /* LBXScanWrapper.swift */; };
+		5B6288DE25B4374600E235A0 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B6288DD25B4374600E235A0 /* CodeScan.bundle */; };
 		5B92120C25B28E48008B81ED /* html in Resources */ = {isa = PBXBuildFile; fileRef = 5B92120B25B28E48008B81ED /* html */; };
 		5B92121925B2B013008B81ED /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B92121825B2B013008B81ED /* SystemInfo.swift */; };
 		5B92122525B2D737008B81ED /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B92122425B2D737008B81ED /* Plugin.swift */; };
@@ -31,6 +39,14 @@
 		5B0FD73725AD53F100A30C7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B0FD73925AD53F100A30C7E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B0FD74225AD546500A30C7E /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = ../../../../src; sourceTree = "<group>"; };
+		5B6288CB25B4321300E235A0 /* LBXScanNetAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanNetAnimation.swift; sourceTree = "<group>"; };
+		5B6288CC25B4321300E235A0 /* LBXScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanView.swift; sourceTree = "<group>"; };
+		5B6288CD25B4321300E235A0 /* LBXScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanViewController.swift; sourceTree = "<group>"; };
+		5B6288CE25B4321300E235A0 /* LBXScanLineAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanLineAnimation.swift; sourceTree = "<group>"; };
+		5B6288CF25B4321300E235A0 /* LBXScanViewStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanViewStyle.swift; sourceTree = "<group>"; };
+		5B6288D025B4321300E235A0 /* LBXPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXPermissions.swift; sourceTree = "<group>"; };
+		5B6288D125B4321300E235A0 /* LBXScanWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanWrapper.swift; sourceTree = "<group>"; };
+		5B6288DD25B4374600E235A0 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
 		5B92120B25B28E48008B81ED /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = ../../../../html; sourceTree = "<group>"; };
 		5B92121825B2B013008B81ED /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
 		5B92122425B2D737008B81ED /* Plugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
@@ -81,6 +97,7 @@
 		5B0FD72A25AD53F000A30C7E /* web-container */ = {
 			isa = PBXGroup;
 			children = (
+				5B6288C925B4321300E235A0 /* Vender */,
 				5B0FD74025AD544700A30C7E /* Resources */,
 				5B0FD72B25AD53F000A30C7E /* AppDelegate.swift */,
 				5B92121825B2B013008B81ED /* SystemInfo.swift */,
@@ -99,10 +116,33 @@
 		5B0FD74025AD544700A30C7E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B6288DD25B4374600E235A0 /* CodeScan.bundle */,
 				5B92120B25B28E48008B81ED /* html */,
 				5B0FD74225AD546500A30C7E /* src */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		5B6288C925B4321300E235A0 /* Vender */ = {
+			isa = PBXGroup;
+			children = (
+				5B6288CA25B4321300E235A0 /* Scanner */,
+			);
+			path = Vender;
+			sourceTree = "<group>";
+		};
+		5B6288CA25B4321300E235A0 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				5B6288CB25B4321300E235A0 /* LBXScanNetAnimation.swift */,
+				5B6288CC25B4321300E235A0 /* LBXScanView.swift */,
+				5B6288CD25B4321300E235A0 /* LBXScanViewController.swift */,
+				5B6288CE25B4321300E235A0 /* LBXScanLineAnimation.swift */,
+				5B6288CF25B4321300E235A0 /* LBXScanViewStyle.swift */,
+				5B6288D025B4321300E235A0 /* LBXPermissions.swift */,
+				5B6288D125B4321300E235A0 /* LBXScanWrapper.swift */,
+			);
+			path = Scanner;
 			sourceTree = "<group>";
 		};
 		7DEB6A418F0A833AF8B10E86 /* Pods */ = {
@@ -174,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B0FD73825AD53F100A30C7E /* LaunchScreen.storyboard in Resources */,
+				5B6288DE25B4374600E235A0 /* CodeScan.bundle in Resources */,
 				5B0FD73525AD53F100A30C7E /* Assets.xcassets in Resources */,
 				5B0FD73325AD53F000A30C7E /* Main.storyboard in Resources */,
 				5B92120C25B28E48008B81ED /* html in Resources */,
@@ -230,12 +271,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B6288D525B4321300E235A0 /* LBXScanLineAnimation.swift in Sources */,
+				5B6288D725B4321300E235A0 /* LBXPermissions.swift in Sources */,
 				5B0FD73025AD53F000A30C7E /* WebContainerViewController.swift in Sources */,
 				5B0FD72C25AD53F000A30C7E /* AppDelegate.swift in Sources */,
+				5B6288D325B4321300E235A0 /* LBXScanView.swift in Sources */,
 				5B92121925B2B013008B81ED /* SystemInfo.swift in Sources */,
 				5B92122525B2D737008B81ED /* Plugin.swift in Sources */,
 				5BD9D96725B082F3006FC2FB /* Utils.swift in Sources */,
+				5B6288D225B4321300E235A0 /* LBXScanNetAnimation.swift in Sources */,
+				5B6288D825B4321300E235A0 /* LBXScanWrapper.swift in Sources */,
+				5B6288D625B4321300E235A0 /* LBXScanViewStyle.swift in Sources */,
 				5B92125B25B31A28008B81ED /* GloableImport.swift in Sources */,
+				5B6288D425B4321300E235A0 /* LBXScanViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

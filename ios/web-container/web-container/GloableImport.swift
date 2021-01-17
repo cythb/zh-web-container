@@ -13,3 +13,4 @@
 @_exported import RxSwift
 @_exported import SnapKit
 @_exported import Log
+@_exported import swiftScan

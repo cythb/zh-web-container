@@ -10,6 +10,6 @@ target 'web-container' do
   pod 'Log'
   pod 'RxSwift'
   pod 'RxMediaPicker', :git => 'https://github.com/cythb/RxMediaPicker.git'
-
+  pod 'swiftScan', :git => 'https://github.com/MxABC/swiftScan.git'
 
 end

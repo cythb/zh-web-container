@@ -30,11 +30,12 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let relaunchPlugin = ReLaunchPlugin()
         let takePhotoPlugin = TakePhotoPlugin(delegate: self)
         let chooseImagePlugin = ChooseImagePlugin(delegate: self)
+        let scanCodePlugin = ScanCodePlugin(presentingVC: self)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
-        
-        
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: scanCodePlugin)
+
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self
         
@@ -60,13 +61,13 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
             return p.name == message.name
         }) else { return }
         
-        guard let dict = message.body as? [String: String],
-              nil != dict["eventId"] else { return }
+        guard let dict = message.body as? [String: Any],
+              nil != dict["eventId"] as? String else { return }
         
         plugin.userContentController(webview: webview, userContentController: userContentController, didReceive: message, done: done)
     }
     
-    func done(eventId: String, isSuccess: Bool, data: [String: String]) {
+    func done(eventId: String, isSuccess: Bool, data: [String: Any]) {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed) else { return }
         
         guard let jsonString = String(data: jsonData, encoding: .utf8) else {

@@ -13,7 +13,7 @@ protocol Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: String]) -> Void )
+                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void )
 }
 
 class ReLaunchPlugin: Plugin {
@@ -24,10 +24,10 @@ class ReLaunchPlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: String]) -> Void ) {
-        guard let dict = message.body as? [String: String],
-              let eventId = dict["eventId"] else { return }
-        guard let file = dict["url"],
+                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void ) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let file = dict["url"] as? String,
               let path = getPath(fileName: file) else {
             done(eventId, false, ["": ""])
             return
@@ -55,10 +55,10 @@ class TakePhotoPlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : String]) -> Void) {
-        guard let dict = message.body as? [String: String],
-              let eventId = dict["eventId"] else { return }
-        guard let sourceType = dict["sourceType"] else {
+                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let sourceType = dict["sourceType"] as? String else {
             done(eventId, false, ["message": "未传sourceType"])
             return
         }
@@ -103,18 +103,18 @@ class ChooseImagePlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : String]) -> Void) {
-        guard let dict = message.body as? [String: String],
-              let eventId = dict["eventId"] else { return }
-        guard let sourceType = dict["sourceType"] else {
+                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let sourceType = dict["sourceType"] as? String else {
             done(eventId, false, ["message": "未传sourceType"])
             return
         }
         var type: UIImagePickerController.SourceType = .photoLibrary
-        if sourceType.contains("album") {
+        if sourceType == "album" {
             type = .savedPhotosAlbum
         }
-        if sourceType.contains("camera") {
+        if sourceType == "camera" {
             type = .camera
         }
         guard UIImagePickerController.isSourceTypeAvailable(type) else {
@@ -136,5 +136,134 @@ class ChooseImagePlugin: Plugin {
             }
             .disposed(by: disposeBag)
 
+    }
+}
+
+class ScanCodePlugin: NSObject, Plugin, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
+                      LBXScanViewControllerDelegate {
+    var name: String {
+        return "scanCode"
+    }
+    
+    weak var presentingVC: UIViewController? = nil
+    var eventId: String?
+    var onlyFromCamera: Bool = false
+    var done: ((String, Bool, [String : Any]) -> Void)?
+
+    init(presentingVC: UIViewController?) {
+        self.presentingVC = presentingVC
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        if let flag = (dict["onlyFromCamera"] as? Bool) {
+            onlyFromCamera = flag
+        }
+        self.eventId = eventId
+        self.done = done
+        
+        if onlyFromCamera == false {
+            let alertController = UIAlertController(title: nil, message: "您希望如何进行扫描？", preferredStyle: .actionSheet)
+            alertController.addAction(UIAlertAction(title: "相册", style: .default, handler: { [unowned self] (action) in
+                self.openAlbum()
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "相机", style: .default, handler: { [unowned self] (action) in
+                self.openCamera()
+            }))
+            self.presentingVC?.present(alertController, animated: true)
+        } else {
+            self.openCamera()
+        }
+    }
+    
+    private func openAlbum() {
+        LBXPermissions.authorizePhotoWith { [unowned self] (granted) in
+            if granted {
+                let picker = UIImagePickerController()
+              
+                picker.sourceType = UIImagePickerController.SourceType.photoLibrary
+                picker.delegate = self
+
+                picker.allowsEditing = true
+                presentingVC?.present(picker, animated: true, completion: nil)
+            } else {
+                LBXPermissions.jumpToSystemPrivacySetting()
+            }
+        }
+    }
+    
+    private func openCamera() {
+        //设置扫码区域参数
+        var style = LBXScanViewStyle()
+        style.centerUpOffset = 44
+        style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner
+        style.photoframeLineW = 2
+        style.photoframeAngleW = 18
+        style.photoframeAngleH = 18
+        style.isNeedShowRetangle = false
+
+        style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
+
+        style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
+
+        style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
+
+        let vc = LBXScanViewController()
+        vc.scanStyle = style
+        vc.scanResultDelegate = self
+        self.presentingVC?.present(vc, animated: true)
+    }
+    
+    func scanFinished(scanResult: LBXScanResult, error: String?) {
+        guard let eventId = self.eventId else {
+            return
+        }
+        
+        if error == nil {
+            self.done?(eventId, true, ["result": scanResult.strScanned ?? ""])
+        } else {
+            self.done?(eventId, false, ["message": error ?? ""])
+        }
+        self.presentingVC?.dismiss(animated: true)
+    }
+    
+    // MARK: - 相册选择图片识别二维码
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        var image:UIImage? = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+        
+        if (image == nil )
+        {
+            image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        }
+        
+        if(image == nil) {
+            return
+        }
+        
+        if(image != nil) {
+            let arrayResult = LBXScanWrapper.recognizeQRImage(image: image!)
+            if arrayResult.count > 0 {
+                let result = arrayResult[0]
+                
+                //showMsg(title: result.strBarCodeType, message: result.strScanned)
+                if let eventId = self.eventId {
+                    self.done?(eventId, true, ["result": result.strScanned ?? ""])
+                }
+                
+                return
+            }
+        }
+        
+        if let eventId = self.eventId {
+            self.done?(eventId, false, ["message": "识别失败"])
+        }
     }
 }
