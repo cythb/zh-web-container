@@ -312,3 +312,36 @@ class GetFileListPlugin: Plugin {
         done(eventId, false, ["message": "查询文件失败"])
     }
 }
+
+class RmfilePlugin: Plugin {
+    var name: String {
+        return "rmFile"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        var path = (dict["path"] as? String) ?? "/"
+        if path.hasSuffix("/") {
+            path.removeLast()
+        }
+        
+        var url = getHomeDirectoryPath()
+        if path.lengthOfBytes(using: .utf8) > 0 {
+            url.appendPathComponent(path)
+        }
+        if FileManager.default.fileExists(atPath: url.relativePath) {
+            do {
+                try FileManager.default.removeItem(atPath: url.relativePath)
+                done(eventId, true, ["message": "删除文件成功"])
+            } catch {
+                done(eventId, false, ["message": "删除文件失败"])
+            }
+        } else {
+            done(eventId, true, ["message": "删除文件成功"])
+        }
+    }
+}

@@ -32,11 +32,13 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let chooseImagePlugin = ChooseImagePlugin(delegate: self)
         let scanCodePlugin = ScanCodePlugin(presentingVC: self)
         let getFileListPlugin = GetFileListPlugin()
+        let rmfilePlugin = RmfilePlugin()
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: scanCodePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: getFileListPlugin)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: rmfilePlugin)
 
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self

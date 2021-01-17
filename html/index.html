@@ -17,6 +17,7 @@
         <input type="button" value="二维码" onclick="onClickBtn7()" />
         <input type="button" value="二维码(相机)" onclick="onClickBtn8()" />
         <input type="button" value="文件列表" onclick="onClickBtn9()" />
+        <input type="button" value="删除文件" onclick="onClickBtn10()" />
         
         <div id='output'></div>
         <script>
@@ -86,7 +87,7 @@
             function onClickBtn7() {
                 native.scanCode(false,
                 (data) => {
-                    console.log('scanCode 完成：' + data.tempImagePath)
+                    console.log('scanCode 完成：' + data.result)
                     log('scanCode 完成')
                     log(JSON.stringify(data))
                 }, (data) => {
@@ -99,7 +100,7 @@
             function onClickBtn8() {
                 native.scanCode(true,
                 (data) => {
-                    console.log('scanCode 完成：' + data.tempImagePath)
+                    console.log('scanCode 完成：' + data.result)
                     log('scanCode 完成')
                     log(JSON.stringify(data))
                 }, (data) => {
@@ -112,13 +113,24 @@
             function onClickBtn9() {
                 native.getFileList('tmp',
                 (data) => {
-                    console.log('getFileList 完成：' + data.tempImagePath)
                     log('getFileList 完成')
                     log(JSON.stringify(data))
                 }, (data) => {
                     console.log('getFileList 失败')
                 }, () => {
                     console.log('getFileList complete')
+                })
+            }
+
+            function onClickBtn10() {
+                native.rmFile('tmp/1610887026.3407211.jpg',
+                (data) => {
+                    log('rmFile 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('rmFile 失败')
+                }, () => {
+                    console.log('rmFile complete')
                 })
             }
         

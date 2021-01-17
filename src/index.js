@@ -164,6 +164,18 @@ class Native {
         let msg = {path: path, eventId: eventId}
         window.webkit.messageHandlers.getFileList.postMessage(msg);
     }
+
+    rmFile(path, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {path: path, eventId: eventId}
+        window.webkit.messageHandlers.rmFile.postMessage(msg);
+    }
 }
 const native = new Native();
 
