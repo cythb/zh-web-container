@@ -18,6 +18,7 @@
         <input type="button" value="二维码(相机)" onclick="onClickBtn8()" />
         <input type="button" value="文件列表" onclick="onClickBtn9()" />
         <input type="button" value="删除文件" onclick="onClickBtn10()" />
+        <input type="button" value="unzip" onclick="onClickBtn11()" />
         
         <div id='output'></div>
         <script>
@@ -131,6 +132,22 @@
                     console.log('rmFile 失败')
                 }, () => {
                     console.log('rmFile complete')
+                })
+            }
+
+            function onClickBtn11() {
+                native.unzip('Documents/file.zip',
+                'Documents/unzip',
+                (data) => {
+                    log('rmFile 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('rmFile 失败')
+                }, () => {
+                    console.log('rmFile complete')
+                }, (percent) => {
+                    const text = 'progress: ' + percent
+                    log(text)
                 })
             }
         

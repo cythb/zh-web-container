@@ -94,7 +94,20 @@ class Native {
             delete this._events[eventId]
         }
         k.complete()
+    }
 
+    progress(eventId, percent) {
+        let k = this._events[eventId]
+        if (k == undefined) {
+            return
+        }
+
+        let p = k.progress 
+        if (p == undefined) {
+            return
+        }
+
+        p(percent)
     }
 
     /**
@@ -176,6 +189,19 @@ class Native {
 
         let msg = {path: path, eventId: eventId}
         window.webkit.messageHandlers.rmFile.postMessage(msg);
+    }
+
+    unzip(zipFilePath, targetPath, success, fail, complete, progress) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete,
+            'progress': progress
+        }
+
+        let msg = {zipFilePath: zipFilePath, targetPath: targetPath, eventId: eventId}
+        window.webkit.messageHandlers.unzip.postMessage(msg);
     }
 }
 const native = new Native();

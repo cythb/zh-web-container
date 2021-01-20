@@ -33,12 +33,14 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let scanCodePlugin = ScanCodePlugin(presentingVC: self)
         let getFileListPlugin = GetFileListPlugin()
         let rmfilePlugin = RmfilePlugin()
+        let unzip = UnzipPlugin()
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: scanCodePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: getFileListPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: rmfilePlugin)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: unzip)
 
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self
@@ -68,7 +70,9 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         guard let dict = message.body as? [String: Any],
               nil != dict["eventId"] as? String else { return }
         
-        plugin.userContentController(webview: webview, userContentController: userContentController, didReceive: message, done: done)
+        // 传递调用的progress闭包进去，就和done一样，用来和js交互
+        // progress -> js.progress -> html
+        plugin.userContentController(webview: webview, userContentController: userContentController, didReceive: message, done: done, progress: progress)
     }
     
     func done(eventId: String, isSuccess: Bool, data: [String: Any]) {
@@ -81,6 +85,13 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let script = "native.done('\(eventId)', \(isSuccess), \(jsonString));"
         self.webview.evaluateJavaScript(script) { (result, error) in
             log.debug("result \(String(describing: result)) error: \(String(describing: error)) data: \(data)")
+        }
+    }
+    
+    func progress(eventId: String, progress: Double) {
+        let script = "native.progress('\(eventId)', \(progress));"
+        self.webview.evaluateJavaScript(script) { (result, error) in
+            log.debug("result-progress \(String(describing: result)) error: \(String(describing: error))")
         }
     }
     

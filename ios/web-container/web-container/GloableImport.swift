@@ -14,3 +14,4 @@
 @_exported import SnapKit
 @_exported import Log
 @_exported import swiftScan
+@_exported import Zip

@@ -13,10 +13,12 @@ protocol Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void )
+                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void,
+                               progress: ((_ eventId: String, _ progress: Double) -> Void)?)
 }
 
 class ReLaunchPlugin: Plugin {
+    
     var name: String {
         return "reLaunch"
     }
@@ -24,7 +26,8 @@ class ReLaunchPlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void ) {
+                               done:@escaping (_ eventId: String, _ isSuccess: Bool, _ data: [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         guard let file = dict["url"] as? String,
@@ -55,7 +58,8 @@ class TakePhotoPlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         guard let sourceType = dict["sourceType"] as? String else {
@@ -103,7 +107,8 @@ class ChooseImagePlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         guard let sourceType = dict["sourceType"] as? String else {
@@ -157,7 +162,8 @@ class ScanCodePlugin: NSObject, Plugin, UIImagePickerControllerDelegate, UINavig
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         if let flag = (dict["onlyFromCamera"] as? Bool) {
@@ -276,7 +282,8 @@ class GetFileListPlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         var path = (dict["path"] as? String) ?? "/"
@@ -321,7 +328,8 @@ class RmfilePlugin: Plugin {
     func userContentController(webview: WKWebView,
                                userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               done:@escaping (String, Bool, [String : Any]) -> Void) {
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
         var path = (dict["path"] as? String) ?? "/"
@@ -342,6 +350,55 @@ class RmfilePlugin: Plugin {
             }
         } else {
             done(eventId, true, ["message": "删除文件成功"])
+        }
+    }
+}
+
+class UnzipPlugin: Plugin {
+    var name: String {
+        return "unzip"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String : Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard var zipFilePath = dict["zipFilePath"] as? String,
+              var targetPath = dict["targetPath"] as? String else {
+            done(eventId, false, ["message": "解压缩失败"])
+            return
+        }
+        
+        if zipFilePath.starts(with:"/") {
+            zipFilePath.removeFirst()
+        }
+        if targetPath.starts(with:"/") {
+            targetPath.removeFirst()
+        }
+        guard zipFilePath.lengthOfBytes(using: .utf8) > 0,
+              targetPath.lengthOfBytes(using: .utf8) > 0 else {
+            done(eventId, false, ["message": "解压缩失败"])
+            return
+        }
+        
+        let url = getHomeDirectoryPath()
+        let zipURL = url.appendingPathComponent(zipFilePath)
+        let targetURL = url.appendingPathComponent(targetPath)
+        
+        do {
+            try Zip.unzipFile(zipURL, destination: targetURL, overwrite: true, password:nil, progress: { (percent) -> () in
+                progress?(eventId, percent)
+                
+                if percent == 1 {
+                    done(eventId, true, ["message": "解压缩成功"])
+                }
+            })
+        }
+        catch {
+            done(eventId, false, ["message": "解压缩失败"])
         }
     }
 }
