@@ -12,5 +12,6 @@ target 'web-container' do
   pod 'RxMediaPicker', :git => 'https://github.com/cythb/RxMediaPicker.git'
   pod 'swiftScan', :git => 'https://github.com/MxABC/swiftScan.git'
   pod 'Zip'
+  pod 'RxAlamofire'
 
 end

@@ -1,5 +1,11 @@
 PODS:
+  - Alamofire (5.4.1)
   - Log (2.0)
+  - RxAlamofire (6.1.1):
+    - RxAlamofire/Core (= 6.1.1)
+  - RxAlamofire/Core (6.1.1):
+    - Alamofire (~> 5.4)
+    - RxSwift (~> 6.0)
   - RxMediaPicker (2.0.0):
     - RxSwift (>= 5.0.0)
   - RxSwift (6.0.0)
@@ -9,6 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - Log
+  - RxAlamofire
   - RxMediaPicker (from `https://github.com/cythb/RxMediaPicker.git`)
   - RxSwift
   - SnapKit (~> 5.0.0)
@@ -17,7 +24,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - Log
+    - RxAlamofire
     - RxSwift
     - SnapKit
     - Zip
@@ -37,13 +46,15 @@ CHECKOUT OPTIONS:
     :git: https://github.com/MxABC/swiftScan.git
 
 SPEC CHECKSUMS:
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   Log: 73fab10e8b88f15cef5f322b12c9be87cf19ee6e
+  RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxMediaPicker: be84f31faf1baff62c2b7e16ee70dd599c858f38
   RxSwift: c14e798c59b9f6e9a2df8fd235602e85cc044295
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   swiftScan: 0849e7d7c1c641384767a573ee8cb90b88d1ddd9
   Zip: 414f59909701fda9a84ab774ebe0f5449b1082cc
 
-PODFILE CHECKSUM: 6e50e241965f9c284c7dc5ed941aa352043ddde2
+PODFILE CHECKSUM: 1790ad7801113b0877cb3afbf08d7e8622d4412c
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0

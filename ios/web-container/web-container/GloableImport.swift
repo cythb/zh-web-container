@@ -15,3 +15,5 @@
 @_exported import Log
 @_exported import swiftScan
 @_exported import Zip
+@_exported import RxAlamofire
+@_exported import Alamofire

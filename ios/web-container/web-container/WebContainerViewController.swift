@@ -34,6 +34,7 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let getFileListPlugin = GetFileListPlugin()
         let rmfilePlugin = RmfilePlugin()
         let unzip = UnzipPlugin()
+        let downlaod = DownloadFilePlugin()
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
@@ -41,6 +42,7 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: getFileListPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: rmfilePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: unzip)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: downlaod)
 
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self

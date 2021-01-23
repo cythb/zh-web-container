@@ -402,3 +402,55 @@ class UnzipPlugin: Plugin {
         }
     }
 }
+
+class DownloadFilePlugin: Plugin {
+    var downlaodBag = DisposeBag()
+    var uploadBag = DisposeBag()
+    
+    var name: String {
+        return "downloadFile"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let urlStr = dict["url"] as? String,
+              var filePath = dict["filePath"] as? String,
+              let url = URL(string: urlStr) else {
+            done(eventId, false, ["message": "下载失败"])
+            return
+        }
+        
+        if filePath.starts(with:"/") {
+            filePath.removeFirst()
+        }
+        guard filePath.lengthOfBytes(using: .utf8) > 0 else {
+            done(eventId, false, ["message": "下载失败"])
+            return
+        }
+        
+        let homrUrl = getHomeDirectoryPath()
+        let fileURL = homrUrl.appendingPathComponent(filePath)
+
+        RxAlamofire.download(URLRequest(url: url) ) { (aURL, response) -> (destinationURL: URL, options: DownloadRequest.Options) in
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }.flatMap { request -> Observable<RxProgress> in
+            let progressPart = request.rx.progress()
+            return progressPart
+        }.subscribe(onNext: { (p) in
+            log.debug(p.completed)
+            progress?(eventId, Double(p.completed))
+        }, onError: { (_) in
+            done(eventId, true, ["message": "下载成功"])
+        }, onCompleted: {
+            done(eventId, false, ["message": "下载失败"])
+        }, onDisposed: {
+            log.debug("download disposed")
+        })
+        .disposed(by: downlaodBag)
+    }
+}

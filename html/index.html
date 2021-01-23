@@ -19,6 +19,7 @@
         <input type="button" value="文件列表" onclick="onClickBtn9()" />
         <input type="button" value="删除文件" onclick="onClickBtn10()" />
         <input type="button" value="unzip" onclick="onClickBtn11()" />
+        <input type="button" value="download" onclick="onClickBtn12()" />
         
         <div id='output'></div>
         <script>
@@ -112,7 +113,7 @@
             }
 
             function onClickBtn9() {
-                native.getFileList('tmp',
+                native.getFileList('Documents',
                 (data) => {
                     log('getFileList 完成')
                     log(JSON.stringify(data))
@@ -150,7 +151,23 @@
                     log(text)
                 })
             }
-        
+
+            function onClickBtn12() {
+                native.downloadFile('http://down10.zol.com.cn/bianji/setup_wnysxz103.exe',
+                'Documents/setup_wnysxz103.exe',
+                (data) => {
+                    log('downloadFile 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('downloadFile 失败')
+                }, () => {
+                    console.log('downloadFile complete')
+                }, (percent) => {
+                    const text = 'progress: ' + percent
+                    log(text)
+                })
+            }  
+
             log('systemInfo:')
             log(JSON.stringify(systemInfo))
         </script>

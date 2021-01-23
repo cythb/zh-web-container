@@ -203,6 +203,19 @@ class Native {
         let msg = {zipFilePath: zipFilePath, targetPath: targetPath, eventId: eventId}
         window.webkit.messageHandlers.unzip.postMessage(msg);
     }
+
+    downloadFile(url, filePath, success, fail, complete, progress) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete,
+            'progress': progress
+        }
+
+        let msg = {url: url, filePath: filePath, eventId: eventId}
+        window.webkit.messageHandlers.downloadFile.postMessage(msg);
+    }
 }
 const native = new Native();
 
