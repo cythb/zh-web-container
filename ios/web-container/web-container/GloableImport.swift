@@ -17,3 +17,4 @@
 @_exported import Zip
 @_exported import RxAlamofire
 @_exported import Alamofire
+@_exported import FMDB

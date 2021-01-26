@@ -13,5 +13,6 @@ target 'web-container' do
   pod 'swiftScan', :git => 'https://github.com/MxABC/swiftScan.git'
   pod 'Zip'
   pod 'RxAlamofire'
+  pod 'FMDB'
 
 end

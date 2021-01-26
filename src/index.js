@@ -229,6 +229,54 @@ class Native {
         let msg = {url: url, filePath: filePath, name: name, formData: formData, eventId: eventId}
         window.webkit.messageHandlers.uploadFile.postMessage(msg);
     }
+
+    openSqlite(file, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {file: file, eventId: eventId}
+        window.webkit.messageHandlers.openSqlite.postMessage(msg);
+    }
+
+    closeSqlite(success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {eventId: eventId}
+        window.webkit.messageHandlers.closeSqlite.postMessage(msg);
+    }
+
+    executeUpdate(sql, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {sql: sql, eventId: eventId}
+        window.webkit.messageHandlers.executeUpdate.postMessage(msg);
+    }
+
+    executeQuery(sql, success, fail, complete) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete
+        }
+
+        let msg = {sql: sql, eventId: eventId}
+        window.webkit.messageHandlers.executeQuery.postMessage(msg);
+    }
 }
 const native = new Native();
 

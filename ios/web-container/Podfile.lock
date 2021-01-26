@@ -1,5 +1,8 @@
 PODS:
   - Alamofire (5.4.1)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - Log (2.0)
   - RxAlamofire (6.1.1):
     - RxAlamofire/Core (= 6.1.1)
@@ -14,6 +17,7 @@ PODS:
   - Zip (2.1.1)
 
 DEPENDENCIES:
+  - FMDB
   - Log
   - RxAlamofire
   - RxMediaPicker (from `https://github.com/cythb/RxMediaPicker.git`)
@@ -25,6 +29,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - FMDB
     - Log
     - RxAlamofire
     - RxSwift
@@ -47,6 +52,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Log: 73fab10e8b88f15cef5f322b12c9be87cf19ee6e
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxMediaPicker: be84f31faf1baff62c2b7e16ee70dd599c858f38
@@ -55,6 +61,6 @@ SPEC CHECKSUMS:
   swiftScan: 0849e7d7c1c641384767a573ee8cb90b88d1ddd9
   Zip: 414f59909701fda9a84ab774ebe0f5449b1082cc
 
-PODFILE CHECKSUM: 1790ad7801113b0877cb3afbf08d7e8622d4412c
+PODFILE CHECKSUM: b8ba06096d5b0b385415a7c4f96081e08efd34cb
 
 COCOAPODS: 1.10.0

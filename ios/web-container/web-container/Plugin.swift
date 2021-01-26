@@ -6,7 +6,6 @@
 //
 
 
-
 protocol Plugin {
     var name: String { get }
     
@@ -508,5 +507,139 @@ class UploadFilePlugin: Plugin {
         }, onDisposed: {
             log.debug("upload disposed")
         }).disposed(by: uploadBag)
+    }
+}
+
+var database: FMDatabase?
+class OpenSqlitePlugin: Plugin {
+    var name: String {
+        return "openSqlite"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard var filePath = dict["file"] as? String else {
+            done(eventId, false, ["message": "打开sqlite文件失败"])
+            return
+        }
+        guard database == nil else {
+            done(eventId, false, ["message": "打开sqlite文件失败, 已经打开一个sqlite数据库，请先关闭。"])
+            return
+        }
+        
+        if filePath.starts(with:"/") {
+            filePath.removeFirst()
+        }
+        guard filePath.lengthOfBytes(using: .utf8) > 0 else {
+            done(eventId, false, ["message": "打开sqlite文件失败，请检查文件路径是否正确"])
+            return
+        }
+        
+        let homrUrl = getHomeDirectoryPath()
+        let fileURL = homrUrl.appendingPathComponent(filePath)
+        
+        database = FMDatabase(url: fileURL)
+        if database?.open() == false {
+            done(eventId, false, ["message": "打开sqlite文件失败"])
+        } else {
+            done(eventId, true, ["message": "打开sqlite文件成功"])
+        }
+    }
+}
+
+class CloseSqlitePlugin: Plugin {
+    var name: String {
+        return "closeSqlite"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard database != nil else {
+            done(eventId, false, ["message": "关闭失败，目前没有打开的数据库。"])
+            return
+        }
+        
+        database?.close()
+        database = nil
+        done(eventId, true, ["message": "关闭sqlite文件成功"])
+    }
+}
+
+class ExecuteUpdatePlugin: Plugin {
+    var name: String {
+        return "executeUpdate"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let sql = dict["sql"] as? String else {
+            done(eventId, false, ["message": "未找到执行的sql语句"])
+            return
+        }
+        guard let db = database else {
+            done(eventId, false, ["message": "执行sql失败，目前没有打开的数据库。"])
+            return
+        }
+        
+        do {
+            try db.executeUpdate(sql, values: nil)
+            done(eventId, true, ["message": "执行sql成功."])
+        } catch let error {
+            done(eventId, false, ["message": "执行sql失败.\(error)"])
+            log.error(error)
+        }
+    }
+}
+
+class ExecuteQueryPlugin: Plugin {
+    var name: String {
+        return "executeQuery"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let sql = dict["sql"] as? String else {
+            done(eventId, false, ["message": "未找到执行的sql语句"])
+            return
+        }
+        guard let db = database else {
+            done(eventId, false, ["message": "查询失败，目前没有打开的数据库。"])
+            return
+        }
+        
+        do {
+            let rs = try db.executeQuery(sql, values: nil)
+            var results = [[String: Any]]()
+            while rs.next() {
+                guard let result = (rs.resultDictionary as? [String: Any]) else { continue }
+                
+                results.append(result)
+            }
+            done(eventId, true, ["message": "执行sql成功.", "results": results])
+            log.debug("执行sql成功：\(results)")
+        } catch let error {
+            done(eventId, false, ["message": "执行sql失败.\(error)"])
+            log.error(error)
+        }
     }
 }

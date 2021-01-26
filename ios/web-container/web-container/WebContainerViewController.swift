@@ -36,6 +36,10 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let unzip = UnzipPlugin()
         let downlaod = DownloadFilePlugin()
         let upload = UploadFilePlugin()
+        let openSqlite = OpenSqlitePlugin()
+        let closeSqlite = CloseSqlitePlugin()
+        let updateSqlite = ExecuteUpdatePlugin()
+        let querySqlite = ExecuteQueryPlugin()
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
@@ -45,6 +49,10 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: unzip)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: downlaod)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: upload)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: openSqlite)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: closeSqlite)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: updateSqlite)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: querySqlite)
 
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self
