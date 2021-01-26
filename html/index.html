@@ -20,6 +20,7 @@
         <input type="button" value="删除文件" onclick="onClickBtn10()" />
         <input type="button" value="unzip" onclick="onClickBtn11()" />
         <input type="button" value="download" onclick="onClickBtn12()" />
+        <input type="button" value="upload" onclick="onClickBtn13()" />
         
         <div id='output'></div>
         <script>
@@ -162,6 +163,24 @@
                     console.log('downloadFile 失败')
                 }, () => {
                     console.log('downloadFile complete')
+                }, (percent) => {
+                    const text = 'progress: ' + percent
+                    log(text)
+                })
+            }  
+
+            function onClickBtn13() {
+                native.uploadFile('http://192.168.0.108:8000/upload',
+                'Documents/setup_wnysxz103.exe',
+                'filename',
+                {'data1': 'a'},
+                (data) => {
+                    log('upload file 完成')
+                    log(JSON.stringify(data))
+                }, (data) => {
+                    console.log('upload file 失败')
+                }, () => {
+                    console.log('upload file complete')
                 }, (percent) => {
                     const text = 'progress: ' + percent
                     log(text)

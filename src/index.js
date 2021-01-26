@@ -216,6 +216,19 @@ class Native {
         let msg = {url: url, filePath: filePath, eventId: eventId}
         window.webkit.messageHandlers.downloadFile.postMessage(msg);
     }
+
+    uploadFile(url, filePath, name, formData, success, fail, complete, progress) {
+        let eventId = this.uuid()
+        this._events[eventId] = {
+            'success': success,
+            'fail': fail,
+            'complete': complete,
+            'progress': progress
+        }
+
+        let msg = {url: url, filePath: filePath, name: name, formData: formData, eventId: eventId}
+        window.webkit.messageHandlers.uploadFile.postMessage(msg);
+    }
 }
 const native = new Native();
 

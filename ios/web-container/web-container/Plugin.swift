@@ -405,8 +405,7 @@ class UnzipPlugin: Plugin {
 
 class DownloadFilePlugin: Plugin {
     var downlaodBag = DisposeBag()
-    var uploadBag = DisposeBag()
-    
+
     var name: String {
         return "downloadFile"
     }
@@ -445,12 +444,69 @@ class DownloadFilePlugin: Plugin {
             log.debug(p.completed)
             progress?(eventId, Double(p.completed))
         }, onError: { (_) in
-            done(eventId, true, ["message": "下载成功"])
-        }, onCompleted: {
             done(eventId, false, ["message": "下载失败"])
+        }, onCompleted: {
+            done(eventId, true, ["message": "下载成功"])
         }, onDisposed: {
             log.debug("download disposed")
         })
         .disposed(by: downlaodBag)
+    }
+}
+
+
+class UploadFilePlugin: Plugin {
+    var uploadBag = DisposeBag()
+    
+    var name: String {
+        return "uploadFile"
+    }
+    
+    func userContentController(webview: WKWebView,
+                               userContentController: WKUserContentController,
+                               didReceive message: WKScriptMessage,
+                               done:@escaping (String, Bool, [String: Any]) -> Void,
+                               progress: ((String, Double) -> Void)?) {
+        guard let dict = message.body as? [String: Any],
+              let eventId = dict["eventId"] as? String else { return }
+        guard let urlStr = dict["url"] as? String,
+              var filePath = dict["filePath"] as? String,
+              let name = dict["name"] as? String,
+              let url = URL(string: urlStr) else {
+            done(eventId, false, ["message": "下载失败"])
+            return
+        }
+        
+        if filePath.starts(with:"/") {
+            filePath.removeFirst()
+        }
+        guard filePath.lengthOfBytes(using: .utf8) > 0 else {
+            done(eventId, false, ["message": "上传失败，请检查文件路径是否正确"])
+            return
+        }
+        
+        let homrUrl = getHomeDirectoryPath()
+        let fileURL = homrUrl.appendingPathComponent(filePath)
+        
+        let parameters = dict["formData"] as? [String: String]
+
+        let upload: Observable<RxAlamofire.RxProgress> = RxAlamofire.upload(multipartFormData: { (multipartFormData) in
+            if let parameters = parameters {
+                for (key, value) in parameters {
+                    multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
+                }
+            }
+            multipartFormData.append(fileURL, withName: name)
+        }, to: url, method: .post, headers: nil)
+        upload.subscribe(onNext: { (p) in
+            log.debug(p.completed)
+            progress?(eventId, Double(p.completed))
+        }, onError: { (_) in
+            done(eventId, false, ["message": "上传失败"])
+        }, onCompleted: {
+            done(eventId, true, ["message": "上传成功"])
+        }, onDisposed: {
+            log.debug("upload disposed")
+        }).disposed(by: uploadBag)
     }
 }

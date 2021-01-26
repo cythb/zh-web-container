@@ -35,6 +35,7 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         let rmfilePlugin = RmfilePlugin()
         let unzip = UnzipPlugin()
         let downlaod = DownloadFilePlugin()
+        let upload = UploadFilePlugin()
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: relaunchPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: takePhotoPlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: chooseImagePlugin)
@@ -43,6 +44,7 @@ class WebContainerViewController: UIViewController, WKScriptMessageHandler {
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: rmfilePlugin)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: unzip)
         self.registerPlugin(wkWebConfig: wkWebConfig, plugin: downlaod)
+        self.registerPlugin(wkWebConfig: wkWebConfig, plugin: upload)
 
         webview = WKWebView(frame: CGRect.zero, configuration: wkWebConfig)
         webview.uiDelegate = self
