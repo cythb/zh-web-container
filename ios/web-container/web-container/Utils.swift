@@ -33,9 +33,9 @@ func getTempDirectoryPath() -> URL {
 /// - Parameter fileName: resource name
 /// - Returns: path
 func getPath(fileName: String) -> String? {
-    let doc = getDocumentDirectoryPath()
-    let fileInDoc = "\(doc.absoluteString)/\(fileName)"
-    if FileManager.default.fileExists(atPath: fileName) {
+    let doc = getHomeDirectoryPath()
+    let fileInDoc = "\(doc.relativePath)/\(fileName)"
+    if FileManager.default.fileExists(atPath: fileInDoc) {
         return fileInDoc
     }
     

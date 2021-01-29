@@ -26,6 +26,7 @@
         <input type="button" value="create sqlite" onclick="onClickBtn16()" />
         <input type="button" value="insert sqlite" onclick="onClickBtn17()" />
         <input type="button" value="select sqlite" onclick="onClickBtn18()" />
+        <input type="button" value="select sqlite" onclick="onClickBtn19()" />
         
         <div id='output'></div>
         <script>
@@ -251,6 +252,28 @@
                     console.log('select complete')
                 })
             }
+
+            function onClickBtn19() {
+                native.downloadFile('https://bonawise-dev.oss-cn-hangzhou.aliyuncs.com/DEMO/login.html',
+                'Documents/login.html',
+                (data) => {
+                    log('downloadFile 完成')
+                    native.reLaunch('Documents/login.html', (data) => {
+                        console.log('success')
+                    }, (data) => {
+                        console.log('fail')
+                    }, () => {
+                        console.log('complete')
+                    })
+                }, (data) => {
+                    console.log('downloadFile 失败')
+                }, () => {
+                    console.log('downloadFile complete')
+                }, (percent) => {
+                    const text = 'progress: ' + percent
+                    log(text)
+                })
+            } 
 
             log('systemInfo:')
             log(JSON.stringify(systemInfo))
