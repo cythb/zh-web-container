@@ -35,8 +35,10 @@ class ReLaunchPlugin: Plugin {
         }
         
         // Special path handling, if `mainbundle/index` opens the built-in home page.
-        if file == "mainbundle/index" {
-            file = "index.html"
+        if file.starts(with: "mainbundle/") {
+            var components = file.split(separator: "/")
+            components.removeFirst()
+            file = components.joined(separator: "/")
         }
         
         guard let path = getPath(fileName: file) else {

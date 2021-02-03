@@ -28,6 +28,7 @@
         <input type="button" value="select sqlite" onclick="onClickBtn18()" />
         <input type="button" value="下载打开login" onclick="onClickBtn19()" />
         <input type="button" value="打开内置主页" onclick="onClickBtn20()" />
+        <input type="button" value="打开内置主页1" onclick="onClickBtn21()" />
         
         <div id='output'></div>
         <script>
@@ -277,7 +278,17 @@
             } 
 
             function onClickBtn20() {
-                native.reLaunch('mainbundle/index', (data) => {
+                native.reLaunch('mainbundle/index.html', (data) => {
+                    console.log('success')
+                }, (data) => {
+                    console.log('fail')
+                }, () => {
+                    console.log('complete')
+                })
+            }
+
+            function onClickBtn21() {
+                native.reLaunch('mainbundle/sub/index1.html', (data) => {
                     console.log('success')
                 }, (data) => {
                     console.log('fail')
