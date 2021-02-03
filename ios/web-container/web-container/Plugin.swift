@@ -29,14 +29,23 @@ class ReLaunchPlugin: Plugin {
                                progress: ((String, Double) -> Void)?) {
         guard let dict = message.body as? [String: Any],
               let eventId = dict["eventId"] as? String else { return }
-        guard let file = dict["url"] as? String,
-              let path = getPath(fileName: file) else {
+        guard var file = dict["url"] as? String else {
             done(eventId, false, ["": ""])
             return
         }
         
-        done(eventId, true, ["": ""])
+        // Special path handling, if `mainbundle/index` opens the built-in home page.
+        if file == "mainbundle/index" {
+            file = "index.html"
+        }
+        
+        guard let path = getPath(fileName: file) else {
+            done(eventId, false, ["": ""])
+            return
+        }
         let url = URL(fileURLWithPath: path)
+        
+        done(eventId, true, ["": ""])
         let request = URLRequest(url: url)
         webview.load(request)
     }
