@@ -93,7 +93,7 @@ class TakePhotoPlugin: Plugin {
                 let data = image.0.jpegData(compressionQuality: type == .front ? 0.4 : 0.2)
                 try? data?.write(to: filePath)
                 
-                done(eventId, false, ["tempImagePath": filePath.absoluteString])
+                done(eventId, true, ["tempImagePath": filePath.absoluteString])
             } onError: { (error) in
                 done(eventId, false, ["message": error.localizedDescription])
             }
@@ -145,7 +145,7 @@ class ChooseImagePlugin: Plugin {
                 let data = image.0.jpegData(compressionQuality: 0.8)
                 try? data?.write(to: filePath)
                 
-                done(eventId, false, ["tempImagePath": filePath.absoluteString])
+                done(eventId, true, ["tempImagePath": filePath.absoluteString])
             } onError: { (error) in
                 done(eventId, false, ["message": error.localizedDescription])
             }

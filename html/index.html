@@ -66,6 +66,7 @@
                 native.takePhoto('front',
                 (data) => {
                     console.log('takePhoto 完成：' + data.tempImagePath)
+                    log('<img width=100 height=100 src="' + data.tempImagePath + '">')
                 }, (data) => {
                     console.log('takePhoto 失败')
                 }, () => {
@@ -77,6 +78,7 @@
                 native.takePhoto('rear',
                 (data) => {
                     console.log('takePhoto 完成：' + data.tempImagePath)
+                    log('<img width=100 height=100 src="' + data.tempImagePath + '">')
                 }, (data) => {
                     console.log('takePhoto 失败')
                 }, () => {
@@ -88,6 +90,7 @@
                 native.chooseImage('album',
                 (data) => {
                     console.log('chooseImage 完成：' + data.tempImagePath)
+                    log('<img width=100 height=100 src="' + data.tempImagePath + '">')
                 }, (data) => {
                     console.log('chooseImage 失败')
                 }, () => {
