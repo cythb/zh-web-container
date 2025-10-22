@@ -9,8 +9,6 @@
 import UIKit
 import AVFoundation
 import Photos
-import AssetsLibrary
-
 
 
 class LBXPermissions: NSObject {

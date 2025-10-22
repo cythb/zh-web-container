@@ -1,8 +1,10 @@
 PODS:
-  - Alamofire (5.4.1)
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
+  - Alamofire (5.10.2)
+  - FMDB (2.7.12):
+    - FMDB/standard (= 2.7.12)
+  - FMDB/Core (2.7.12)
+  - FMDB/standard (2.7.12):
+    - FMDB/Core
   - Log (2.0)
   - RxAlamofire (6.1.1):
     - RxAlamofire/Core (= 6.1.1)
@@ -11,10 +13,9 @@ PODS:
     - RxSwift (~> 6.0)
   - RxMediaPicker (2.0.0):
     - RxSwift (>= 5.0.0)
-  - RxSwift (6.0.0)
+  - RxSwift (6.9.0)
   - SnapKit (5.0.1)
-  - swiftScan (1.2.1)
-  - Zip (2.1.1)
+  - Zip (2.1.2)
 
 DEPENDENCIES:
   - FMDB
@@ -23,7 +24,6 @@ DEPENDENCIES:
   - RxMediaPicker (from `https://github.com/cythb/RxMediaPicker.git`)
   - RxSwift
   - SnapKit (~> 5.0.0)
-  - swiftScan (from `https://github.com/MxABC/swiftScan.git`)
   - Zip
 
 SPEC REPOS:
@@ -39,28 +39,22 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   RxMediaPicker:
     :git: https://github.com/cythb/RxMediaPicker.git
-  swiftScan:
-    :git: https://github.com/MxABC/swiftScan.git
 
 CHECKOUT OPTIONS:
   RxMediaPicker:
     :commit: 3f19e8befe42c194cc37af99f48741915009927c
     :git: https://github.com/cythb/RxMediaPicker.git
-  swiftScan:
-    :commit: b0cc9aea11140125b75d1baaccb16c9567cdf69a
-    :git: https://github.com/MxABC/swiftScan.git
 
 SPEC CHECKSUMS:
-  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   Log: 73fab10e8b88f15cef5f322b12c9be87cf19ee6e
   RxAlamofire: beb75a1c452d0de225651db4903f5d29d034a620
   RxMediaPicker: be84f31faf1baff62c2b7e16ee70dd599c858f38
-  RxSwift: c14e798c59b9f6e9a2df8fd235602e85cc044295
+  RxSwift: 31649ace6aceeb422e16ff71c60804f9c3281ed9
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  swiftScan: 0849e7d7c1c641384767a573ee8cb90b88d1ddd9
-  Zip: 414f59909701fda9a84ab774ebe0f5449b1082cc
+  Zip: b3fef584b147b6e582b2256a9815c897d60ddc67
 
-PODFILE CHECKSUM: b8ba06096d5b0b385415a7c4f96081e08efd34cb
+PODFILE CHECKSUM: c91312a658c2c01fd1355ec3321a70c6a313d618
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.16.2

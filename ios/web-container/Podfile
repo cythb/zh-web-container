@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
- platform :ios, '11.0'
+ platform :ios, '12.0'
 
 target 'web-container' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -10,9 +10,16 @@ target 'web-container' do
   pod 'Log'
   pod 'RxSwift'
   pod 'RxMediaPicker', :git => 'https://github.com/cythb/RxMediaPicker.git'
-  pod 'swiftScan', :git => 'https://github.com/MxABC/swiftScan.git'
+#  pod 'swiftScan', :git => 'https://github.com/MxABC/swiftScan.git'
   pod 'Zip'
   pod 'RxAlamofire'
   pod 'FMDB'
 
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      end
+    end
+  end
 end
